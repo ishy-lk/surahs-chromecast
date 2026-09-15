@@ -10,7 +10,7 @@ Edit the `surahs` list in `config.json`, then restart the service:
 
 ```bash
 nano config.json          # e.g. change a surah's "play_time" or "days"
-sudo systemctl restart kahf-chromecast
+sudo systemctl restart surahs-chromecast
 ```
 
 That's it — no code changes needed. Add a new surah by adding another entry to the `surahs` list (drop the mp3 in this folder first).
@@ -75,8 +75,8 @@ Copy `config.example.json` to `config.json` and edit as needed (`config.json` is
 ## Setup
 
 ```bash
-git clone https://github.com/ishy-lk/kahf-chromecast.git
-cd kahf-chromecast
+git clone https://github.com/ishy-lk/surahs-chromecast.git
+cd surahs-chromecast
 ./setup.sh
 cp config.example.json config.json
 nano config.json
@@ -94,20 +94,21 @@ python3 surahs.py --test
 ## Service Management (Linux / Raspberry Pi / systemd)
 
 ```bash
-sed "s/YOUR_USERNAME/$USER/g" kahf.service | sudo tee /etc/systemd/system/kahf-chromecast.service
+sed "s/YOUR_USERNAME/$USER/g" surahs.service | sudo tee /etc/systemd/system/surahs-chromecast.service
 sudo systemctl daemon-reload
-sudo systemctl enable --now kahf-chromecast
+sudo systemctl enable --now surahs-chromecast
 
 # Check status / logs
-sudo systemctl status kahf-chromecast
-sudo journalctl -u kahf-chromecast -f
+sudo systemctl status surahs-chromecast
+sudo journalctl -u surahs-chromecast -f
+# or: tail -f /var/log/surahs_chromecast.log
 ```
 
 ## Updating
 
 ```bash
 git pull
-sudo systemctl restart kahf-chromecast
+sudo systemctl restart surahs-chromecast
 ```
 
 `setup.sh` only needs to be run once (or again if `requirements.txt` changes). Your `config.json` is untouched by updates.

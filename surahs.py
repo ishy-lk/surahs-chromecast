@@ -68,7 +68,7 @@ VOLUME = _cfg.get("volume", 0.5)
 
 # Each entry: name, artist, audio_file, play_time ("HH:MM", 24h local time),
 # days (0=Mon..6=Sun, defaults to every day). Edit these and restart the
-# service (sudo systemctl restart kahf-chromecast) to change the schedule.
+# service (sudo systemctl restart surahs-chromecast) to change the schedule.
 SURAHS = _cfg.get("surahs", [])
 for _s in SURAHS:
     _s.setdefault("days", [0, 1, 2, 3, 4, 5, 6])
