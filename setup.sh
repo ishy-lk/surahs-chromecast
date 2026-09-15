@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Kahf Chromecast Setup Script
-# This script sets up the environment for the Surah Al-Kahf Chromecast player
+# Surahs Chromecast Setup Script
+# This script sets up the environment for the Quran Surahs Chromecast player
 
 set -e  # Exit on error
 
-echo "📖 Surah Al-Kahf Chromecast Setup"
-echo "=================================="
+echo "📖 Surahs Chromecast Setup"
+echo "==========================="
 
 # Check if Python 3 is installed
 if ! command -v python3 &> /dev/null; then
@@ -44,16 +44,16 @@ echo ""
 echo "📝 Next steps:"
 echo "1. Edit config.json with your settings:"
 echo "   - speaker_or_group_name: Your Chromecast device name(s)"
-echo "   - play_time: 24h HH:MM, when to play daily"
-echo "   - days: 0=Mon..6=Sun, which days to play on"
+echo "   - surahs: one entry per surah, each with its own play_time and days"
 echo ""
 echo "2. Test it:"
-echo "   python3 kahf.py --duration   # confirm the audio duration"
-echo "   python3 kahf.py --next       # confirm the next scheduled run"
-echo "   python3 kahf.py --test       # cast immediately"
+echo "   python3 surahs.py --duration   # confirm audio durations"
+echo "   python3 surahs.py --next       # confirm each surah's next scheduled run"
+echo "   python3 surahs.py --test       # cast the first configured surah immediately"
+echo "   python3 surahs.py --test Al-Baqarah   # cast a specific surah by name"
 echo ""
 echo "3. Run the scheduler:"
-echo "   python3 kahf.py"
+echo "   python3 surahs.py"
 echo ""
 echo "Note: If you created a virtual environment, activate it before running:"
 echo "   source venv/bin/activate"

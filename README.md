@@ -1,33 +1,37 @@
-# 📖 Surah Al-Kahf Chromecast
+# 📖 Surahs Chromecast
 
-Automatically plays Surah Al-Kahf on Google Chromecast devices at a scheduled time every day (or on chosen days of the week).
+Automatically plays Quran Surahs on Google Chromecast devices, each on its own daily schedule (time of day + optional day-of-week filter), all from one service.
 
-Sibling project to [azan-chromecast](https://github.com/ishy-lk/azan-chromecast) — same Cast-discovery/playback approach, much simpler: one fixed daily time instead of a prayer timetable.
+Sibling project to [azan-chromecast](https://github.com/ishy-lk/azan-chromecast) — same Cast-discovery/playback approach, much simpler: fixed times of day per surah instead of a prayer timetable.
 
-## Changing the time
+## Changing the schedule
 
-Edit `play_time` in `config.json`, then restart the service:
+Edit the `surahs` list in `config.json`, then restart the service:
 
 ```bash
-nano config.json          # e.g. "play_time": "11:30"
+nano config.json          # e.g. change a surah's "play_time" or "days"
 sudo systemctl restart kahf-chromecast
 ```
 
-That's it — no code changes needed.
+That's it — no code changes needed. Add a new surah by adding another entry to the `surahs` list (drop the mp3 in this folder first).
 
-## Audio
+## Surahs
 
-`surah-kahf-sudais.mp3` — Surat Al-Kahf recited by Abdur-Rahman as-Sudays (source: quranicaudio.com).
+| Surah | Reciter | Schedule | Duration |
+|---|---|---|---|
+| Al-Kahf | Abdur-Rahman as-Sudays | Friday 12:00 | 23m 41s (1420.86s, 192kbps CBR, 34MB) |
+| Al-Baqarah | Abdulrahman Alsudaes | Daily 14:00 | 93m 46s (5626.02s, ~128kbps VBR, 90MB) |
 
-- **Duration: 23m 41s** (1420.86s), 192kbps CBR, 34MB
+Sources: `surah-kahf-sudais.mp3` from quranicaudio.com, `surah-baqarah-sudais.mp3` from mp3quran.net.
 
 ## Quick Commands
 
 ```bash
-python3 kahf.py --duration   # print the audio duration and exit
-python3 kahf.py --next       # print the next scheduled playback time and exit
-python3 kahf.py --test       # cast immediately (ignores schedule)
-python3 kahf.py              # run the scheduler
+python3 surahs.py --duration           # print each surah's audio duration and exit
+python3 surahs.py --next               # print each surah's next scheduled run, and exit
+python3 surahs.py --test               # cast the first configured surah immediately
+python3 surahs.py --test Al-Baqarah    # cast a specific surah by name immediately
+python3 surahs.py                      # run the scheduler
 ```
 
 ## Configuration (`config.json`)
@@ -35,20 +39,36 @@ python3 kahf.py              # run the scheduler
 ```json
 {
   "speaker_or_group_name": ["HomeGroup"],
-  "play_time": "11:30",
-  "days": [0, 1, 2, 3, 4, 5, 6],
   "volume": 0.5,
-  "audio_file": "surah-kahf-sudais.mp3",
   "bg_image": "makkah-1-wide-optimized.jpeg",
-  "port": 8001
+  "port": 8001,
+  "surahs": [
+    {
+      "name": "Al-Kahf",
+      "artist": "Abdur-Rahman as-Sudays",
+      "audio_file": "surah-kahf-sudais.mp3",
+      "play_time": "12:00",
+      "days": [4]
+    },
+    {
+      "name": "Al-Baqarah",
+      "artist": "Abdulrahman Alsudaes",
+      "audio_file": "surah-baqarah-sudais.mp3",
+      "play_time": "14:00",
+      "days": [0, 1, 2, 3, 4, 5, 6]
+    }
+  ]
 }
 ```
 
 - `speaker_or_group_name` — Chromecast device or group name(s) to cast to
-- `play_time` — 24h `HH:MM`, local time
-- `days` — which days to play on, `0`=Monday .. `6`=Sunday. Defaults to every day. For the traditional Friday-only sunnah, use `[4]`
-- `volume` — Cast volume, `0.0`–`1.0`
+- `volume` — Cast volume, `0.0`–`1.0`, shared by all surahs
 - `port` — local HTTP server port that serves the audio/image to the Cast device. Defaults to `8001` so it doesn't clash with azan-chromecast's `8000` if both run on the same Pi
+- `surahs` — one entry per surah:
+  - `name` / `artist` — shown on the Google Home/Nest Hub display
+  - `audio_file` — mp3 filename in this folder
+  - `play_time` — 24h `HH:MM`, local time
+  - `days` — which days to play on, `0`=Monday .. `6`=Sunday. Defaults to every day. For the traditional Friday-only sunnah, use `[4]`
 
 Copy `config.example.json` to `config.json` and edit as needed (`config.json` is gitignored so your device names stay local).
 
@@ -66,9 +86,9 @@ Test before installing as a service:
 
 ```bash
 source venv/bin/activate
-python3 kahf.py --duration
-python3 kahf.py --next
-python3 kahf.py --test
+python3 surahs.py --duration
+python3 surahs.py --next
+python3 surahs.py --test
 ```
 
 ## Service Management (Linux / Raspberry Pi / systemd)
@@ -94,8 +114,9 @@ sudo systemctl restart kahf-chromecast
 
 ## Features
 
-- Plays Surah Al-Kahf on a Chromecast device/group at a configurable daily time
-- Optional day-of-week filter (defaults to every day)
+- Plays any number of Quran Surahs on a Chromecast device/group, each on its own configurable daily time
+- Optional day-of-week filter per surah (defaults to every day)
 - Visual display on Google Home/Nest Hub screens: title, reciter, and a Makkah background image
 - Seekable/bufferable playback (not a live stream) so the progress bar works on-screen
-- Auto-detects local IP address for serving the audio file
+- Duration detection via `ffprobe` (falls back to a CBR frame-header estimate if `ffprobe` is unavailable) — correct for both CBR and VBR files
+- Auto-detects local IP address for serving the audio files
