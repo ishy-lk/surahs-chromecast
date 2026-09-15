@@ -1,0 +1,13 @@
+{
+  "speaker_or_group_name": ["HomeGroup"],
+  "play_time": "11:30",
+  "days": [0, 1, 2, 3, 4, 5, 6],
+  "volume": 0.5,
+  "audio_file": "surah-kahf-sudais.mp3",
+  "bg_image": "makkah-1-wide-optimized.jpeg",
+  "port": 8001,
+
+  "_comment_play_time": "24-hour HH:MM, local time. Edit this and restart the service (sudo systemctl restart kahf-chromecast) to change the time.",
+  "_comment_days": "0=Mon .. 6=Sun. Runs every day by default. For the Friday sunnah only, use [4].",
+  "_comment_port": "Must differ from azan-chromecast's port (default 8000) if both run on the same machine."
+}
