@@ -39,7 +39,7 @@ python3 surahs.py                      # run the scheduler
 ```json
 {
   "speaker_or_group_name": ["HomeGroup"],
-  "volume": 0.5,
+  "volume": 0.25,
   "bg_image": "makkah-1-wide-optimized.jpeg",
   "port": 8001,
   "surahs": [
