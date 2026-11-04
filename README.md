@@ -20,7 +20,7 @@ That's it — no code changes needed. Add a new surah by adding another entry to
 | Surah | Reciter | Schedule | Duration |
 |---|---|---|---|
 | Al-Kahf | Abdur-Rahman as-Sudays | Friday 12:00 | 23m 41s (1420.86s, 192kbps CBR, 34MB) |
-| Al-Baqarah | Abdulrahman Alsudaes | Daily 10:00 | 93m 46s (5626.02s, ~128kbps VBR, 90MB) |
+| Al-Baqarah | Abdulrahman Alsudaes | Daily 09:00 | 93m 46s (5626.02s, ~128kbps VBR, 90MB) |
 
 Sources: `surah-kahf-sudais.mp3` from quranicaudio.com, `surah-baqarah-sudais.mp3` from mp3quran.net.
 
@@ -54,7 +54,7 @@ python3 surahs.py                      # run the scheduler
       "name": "Al-Baqarah",
       "artist": "Abdulrahman Alsudaes",
       "audio_file": "surah-baqarah-sudais.mp3",
-      "play_time": "10:00",
+      "play_time": "09:00",
       "days": [0, 1, 2, 3, 4, 5, 6]
     }
   ]
