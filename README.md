@@ -104,6 +104,45 @@ sudo journalctl -u surahs-chromecast -f
 # or: tail -f /var/log/surahs_chromecast.log
 ```
 
+### Shell shortcuts on this Pi
+
+These shortcuts are defined in `~/.bashrc` on this Pi, not installed by
+`setup.sh`. To add them on another machine, put this in `~/.bashrc` (adjust the
+project path if needed):
+
+```bash
+alias start-surahs='sudo systemctl start surahs-chromecast'
+alias stop-surahs='sudo systemctl stop surahs-chromecast'
+play-surahs() {
+    sudo systemctl start surahs-chromecast &&
+        "$HOME/git/surahs-chromecast/venv/bin/python3" "$HOME/git/surahs-chromecast/surahs.py" --test "$@"
+}
+```
+
+Reload your shell with `source ~/.bashrc`, then:
+
+```bash
+start-surahs              # start the scheduler (waits for the scheduled time)
+stop-surahs               # stop the service
+play-surahs               # start the service and immediately cast the first configured surah
+play-surahs Al-Baqarah    # immediately cast a specific configured surah
+play-surahs Al-Kahf       # immediately cast Al-Kahf
+```
+
+`play-surahs` starts playback immediately, regardless of the configured time or
+day, including when the service was stopped. It replaces current media on the
+configured Chromecast device/group and starts the requested surah from the
+beginning; unrelated speakers are unaffected.
+
+It also resumes scheduled playback and keeps the service running to serve the
+full audio after the immediate-cast command exits. Use an exact configured surah
+name: the existing `--test` mode falls back to the first surah if a name is not
+found.
+
+The immediate-cast command may print `http_server_error` / `Address already in
+use` because the running service already owns the audio server port. Playback
+uses that existing server.
+
 ## Updating
 
 ```bash
